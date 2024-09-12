@@ -10,6 +10,7 @@ import UIKit
 class ViewController: UIViewController {
     var movies = [Movie]()
     
+    @IBOutlet weak var searchBar: UISearchBar!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -19,7 +20,6 @@ class ViewController: UIViewController {
     
     func createUrl(text: String) -> URL?{
         //create url
-        var text = ""
         guard let cleanURL = text.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { fatalError("Can't make a url from: \(text)")}
         //TODO: - ADD YOUR API KEY HERE
         let api_key = "69ad4a4df621816f1475a08fc5291b7b"
@@ -69,5 +69,14 @@ class ViewController: UIViewController {
     
 }
 
-
+extension ViewController: UISearchBarDelegate{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text, !text.isEmpty else { return }
+        if let movieURL = createUrl(text: text){
+            getResults(url: movieURL)
+        }
+        
+        searchBar.resignFirstResponder()
+    }
+}
 
