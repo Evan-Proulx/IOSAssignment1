@@ -15,17 +15,30 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var movieTitle: UILabel!
     
     var selectedMovie: Movie?
+    var selectedActor: Actor?
+    
+    var detailType = "movie"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //set details
-        movieTitle.text = selectedMovie?.title
-        details.text = selectedMovie?.overview
-        date.text = selectedMovie?.releaseDate
-        //get image from url
-        if let posterPath = selectedMovie?.poster {
-            fetchImage(forPath: posterPath)
+        //set data based on detail type
+        if detailType == "movie"{
+            movieTitle.text = selectedMovie?.title
+            details.text = selectedMovie?.overview
+            date.text = selectedMovie?.releaseDate
+            //get image from url
+            if let posterPath = selectedMovie?.poster {
+                fetchImage(forPath: posterPath)
+            }
+        }else if detailType == "person"{
+            movieTitle.text = selectedActor?.name
+            details.text = selectedActor?.knownForDepartment
+            date.text = ""
+            //get image from url
+            if let posterPath = selectedActor?.profilePath {
+                fetchImage(forPath: posterPath)
+            }
         }
         
         if let customFont = UIFont(name: "ProtestGuerrilla-Regular.ttf", size: 33){

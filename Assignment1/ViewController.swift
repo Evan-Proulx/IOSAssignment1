@@ -22,6 +22,8 @@ class ViewController: UIViewController {
         searchBar.delegate = self
     }
     
+    
+    //MARK: Datasources
     //tableview for movies
     lazy var datasource = UITableViewDiffableDataSource<Section, Movie>(tableView: tableView){
         tableview, indexpath, movie in
@@ -33,13 +35,6 @@ class ViewController: UIViewController {
             self.fetchImage(forPath: moviePosterPath, inCell: cell!)
         }
         return cell
-    }
-    //snapshot for movies
-    func createSnapshot(){
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Movie>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(movies)
-        datasource.apply(snapshot,animatingDifferences: true)
     }
     
     //tableView for actors
@@ -54,6 +49,14 @@ class ViewController: UIViewController {
         }
         return cell
     }
+    //MARK: Snapshots
+    //snapshot for movies
+    func createSnapshot(){
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Movie>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies)
+        datasource.apply(snapshot,animatingDifferences: true)
+    }
     //snapshot for actors
     func createActorSnapshot(){
         var snapshot = NSDiffableDataSourceSnapshot<Section, Actor>()
@@ -62,6 +65,8 @@ class ViewController: UIViewController {
         actorDatasource.apply(snapshot,animatingDifferences: true)
     }
     
+    
+    //MARK: Methods
     func fetchImage(forPath path:String, inCell cell: MovieTableViewCell){
         let initialPath = "https://image.tmdb.org/t/p/w500/"
         
@@ -111,6 +116,7 @@ class ViewController: UIViewController {
                 guard let fetchedData = data else { return }
                 print(fetchedData)
                 do{
+                    //get movie poster
                     if self.searchType == "movie"{
                         let jsonDecoder = JSONDecoder()
                         let downloadedResults = try jsonDecoder.decode(Movies.self, from: fetchedData)
@@ -121,6 +127,7 @@ class ViewController: UIViewController {
                         DispatchQueue.main.async {
                             self.createSnapshot()
                         }
+                    //get actor image
                     }else if self.searchType == "person"{
                         let jsonDecoder = JSONDecoder()
                         let downloadedResults = try jsonDecoder.decode(Actors.self, from: fetchedData)
@@ -150,18 +157,27 @@ class ViewController: UIViewController {
     @IBAction func setSearch(_ sender: Any) {
         if searchType == "movie"{
             searchType = "person"
-        }else{
+        }else if searchType == "person"{
             searchType = "movie"
         }
         
         print("SWITCHED: \(searchType)")
     }
+    
+    //send data to the detailView depending on the searchType
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         guard let index = tableView.indexPathForSelectedRow else {return}
-        
-        let movieToPass = datasource.itemIdentifier(for: index)
         let destinationVC = segue.destination as! DetailsViewController
-        destinationVC.selectedMovie = movieToPass
+        
+        if searchType == "movie"{
+            let movieToPass = datasource.itemIdentifier(for: index)
+            destinationVC.selectedMovie = movieToPass
+            destinationVC.detailType = searchType
+        }else if searchType == "person"{
+            let actorToPass = actorDatasource.itemIdentifier(for: index)
+            destinationVC.selectedActor = actorToPass
+            destinationVC.detailType = searchType
+        }
     }
 }
 
@@ -175,7 +191,6 @@ extension ViewController: UISearchBarDelegate{
             print("test")
             getResults(url: movieURL)
         }
-        
         searchBar.resignFirstResponder()
     }
 }
