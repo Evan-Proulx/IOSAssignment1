@@ -16,21 +16,25 @@ struct Movies: Codable{
 }
 
 struct Movie:Codable,Hashable{
-    var id: Int
+    var backdropPath: String?
     var title: String
-    var overview: String
-    var votes: Double
+    var overview: String?
+    var posterPath: String?
     var releaseDate: String?
-    var poster: String?
-    var backdrop: String?
     
-    enum CodingKeys: String, CodingKey{
-        case id
-        case title
-        case overview
-        case releaseDate = "release_date"
-        case poster = "poster_path"
-        case backdrop = "backdrop_path"
-        case votes = "vote_average"
-    }
+    enum CodingKeys: String, CodingKey {
+            case backdropPath = "backdrop_path"
+            case title
+            case overview = "overview"
+            case posterPath = "poster_path"
+            case releaseDate = "release_date"
+        }
+    
+    init(backdropPath: String?, title: String, overview: String?, posterPath: String?, releaseDate: String?) {
+            self.backdropPath = backdropPath
+            self.title = title
+            self.overview = overview
+            self.posterPath = posterPath
+            self.releaseDate = releaseDate
+        }
 }

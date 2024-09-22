@@ -9,13 +9,13 @@ import UIKit
 
 class ViewController: UIViewController {
     var movies = [Movie]()
-    var actors = [Actor]()
+    var m = [Response]()
+    var mixedResponse = [Response]()
     
     @IBOutlet weak var searchSwitch: UISwitch!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var searchType = "movie"
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -31,20 +31,7 @@ class ViewController: UIViewController {
 
         cell?.title.text = movie.title
         
-        if let moviePosterPath = movie.poster{
-            self.fetchImage(forPath: moviePosterPath, inCell: cell!)
-        }
-        return cell
-    }
-    
-    //tableView for actors
-    lazy var actorDatasource = UITableViewDiffableDataSource<Section, Actor>(tableView: tableView){
-        tableview, indexpath, actor in
-        let cell = tableview.dequeueReusableCell(withIdentifier: "movieCell", for: indexpath) as? MovieTableViewCell
-
-        cell?.title.text = actor.name
-        
-        if let moviePosterPath = actor.profilePath{
+        if let moviePosterPath = movie.posterPath{
             self.fetchImage(forPath: moviePosterPath, inCell: cell!)
         }
         return cell
@@ -57,14 +44,6 @@ class ViewController: UIViewController {
         snapshot.appendItems(movies)
         datasource.apply(snapshot,animatingDifferences: true)
     }
-    //snapshot for actors
-    func createActorSnapshot(){
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Actor>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(actors)
-        actorDatasource.apply(snapshot,animatingDifferences: true)
-    }
-    
     
     //MARK: Methods
     func fetchImage(forPath path:String, inCell cell: MovieTableViewCell){
@@ -95,7 +74,7 @@ class ViewController: UIViewController {
         //create url
         guard let cleanURL = text.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) else { fatalError("Can't make a url from: \(text)")}
         let api_key = "69ad4a4df621816f1475a08fc5291b7b"
-        var urlString = "https://api.themoviedb.org/3/search/\(searchType)?query="
+        var urlString = "https://api.themoviedb.org/3/search/multi?query="
         urlString = urlString.appending(cleanURL)
         urlString = urlString.appending("&api_key=\(api_key)")
         
@@ -116,31 +95,17 @@ class ViewController: UIViewController {
                 guard let fetchedData = data else { return }
                 print(fetchedData)
                 do{
-                    //get movie poster
-                    if self.searchType == "movie"{
-                        let jsonDecoder = JSONDecoder()
-                        let downloadedResults = try jsonDecoder.decode(Movies.self, from: fetchedData)
-                        
-                        self.movies.removeAll()
-                        self.movies = downloadedResults.results
-                        print(self.movies)
-                        
+                //get movie poster
+                    let jsonDecoder = JSONDecoder()
+                    let downloadedResults = try jsonDecoder.decode(Responses.self, from: fetchedData)
+                    
+                    self.movies.removeAll()
+                    self.mixedResponse = downloadedResults.results
+                    self.getMoviesFromResponse()
+                
                         DispatchQueue.main.async {
                             self.createSnapshot()
                         }
-                    //get actor image
-                    }else if self.searchType == "person"{
-                        let jsonDecoder = JSONDecoder()
-                        let downloadedResults = try jsonDecoder.decode(Actors.self, from: fetchedData)
-                        
-                        self.actors.removeAll()
-                        self.actors = downloadedResults.results
-                        print(self.actors)
-                        
-                        DispatchQueue.main.async {
-                            self.createActorSnapshot()
-                        }
-                    }
                 } catch DecodingError.valueNotFound(let type, let context){
                     print("Error - value not found \(type): \(context)")
                 } catch DecodingError.typeMismatch(let type, let context){
@@ -155,17 +120,37 @@ class ViewController: UIViewController {
         movieTask.resume()
     }
     
-    //sets search type when the swich changes state
-    @IBAction func setSearch(_ sender: Any) {
-        if searchType == "movie"{
-            searchType = "person"
-            createActorSnapshot()
-        }else if searchType == "person"{
-            searchType = "movie"
-            createSnapshot()
+    //gets the media type from the response. If it is a movie creates movie object and adds it to the list
+    func getMoviesFromResponse(){
+        for response in mixedResponse {
+            switch response.mediaType{
+            case "movie":
+                if let backdrop = response.backdropPath, let title = response.title, let releaseDate = response.releaseDate{
+                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: releaseDate)
+                    movies.append(movie)
+                }
+                break
+            case "tv":
+                if let backdrop = response.backdropPath, let title = response.name{
+                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: "")
+                    print(movie)
+                    movies.append(movie)
+                }
+                break
+            case "person":
+                if let knownFor = response.knownFor{
+                    for film in knownFor{
+                        if let backdrop = film.backdropPath, let title = film.title, let releaseDate = film.releaseDate{
+                            let movie = Movie(backdropPath: backdrop, title: title, overview: film.overview, posterPath: film.posterPath, releaseDate: releaseDate)
+                            movies.append(movie)
+                        }
+                    }
+                }
+            default:
+                return
+            }
         }
-        
-        print("SWITCHED: \(searchType)")
+        print("MOVIES \(movies)")
     }
     
     //send data to the detailView depending on the searchType
@@ -173,15 +158,8 @@ class ViewController: UIViewController {
         guard let index = tableView.indexPathForSelectedRow else {return}
         let destinationVC = segue.destination as! DetailsViewController
         
-        if searchType == "movie"{
             let movieToPass = datasource.itemIdentifier(for: index)
             destinationVC.selectedMovie = movieToPass
-            destinationVC.detailType = searchType
-        }else if searchType == "person"{
-            let actorToPass = actorDatasource.itemIdentifier(for: index)
-            destinationVC.selectedActor = actorToPass
-            destinationVC.detailType = searchType
-        }
     }
 }
 
