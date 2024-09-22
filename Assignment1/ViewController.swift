@@ -121,6 +121,7 @@ class ViewController: UIViewController {
                         let jsonDecoder = JSONDecoder()
                         let downloadedResults = try jsonDecoder.decode(Movies.self, from: fetchedData)
                         
+                        self.movies.removeAll()
                         self.movies = downloadedResults.results
                         print(self.movies)
                         
@@ -132,6 +133,7 @@ class ViewController: UIViewController {
                         let jsonDecoder = JSONDecoder()
                         let downloadedResults = try jsonDecoder.decode(Actors.self, from: fetchedData)
                         
+                        self.actors.removeAll()
                         self.actors = downloadedResults.results
                         print(self.actors)
                         
@@ -157,8 +159,10 @@ class ViewController: UIViewController {
     @IBAction func setSearch(_ sender: Any) {
         if searchType == "movie"{
             searchType = "person"
+            createActorSnapshot()
         }else if searchType == "person"{
             searchType = "movie"
+            createSnapshot()
         }
         
         print("SWITCHED: \(searchType)")

@@ -11,7 +11,7 @@ class DetailsViewController: UIViewController {
 
     @IBOutlet weak var details: UILabel!
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var detailImage: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
     
     var selectedMovie: Movie?
@@ -41,7 +41,7 @@ class DetailsViewController: UIViewController {
             }
         }
         
-        if let customFont = UIFont(name: "ProtestGuerrilla-Regular.ttf", size: 33){
+        if let customFont = UIFont(name: "ProtestGuerrilla-Regular", size: 33){
             movieTitle.font = UIFontMetrics(forTextStyle: .title1).scaledFont(for: customFont)
         }
     }
@@ -59,7 +59,9 @@ class DetailsViewController: UIViewController {
             
             if error == nil, let url = url, let data = try? Data(contentsOf: url), let image = UIImage(data: data){
                 //set image
-                self.image.image = image
+                DispatchQueue.main.async{
+                    self.detailImage.image = image
+                }
             }
         }
         imageFetch.resume()
