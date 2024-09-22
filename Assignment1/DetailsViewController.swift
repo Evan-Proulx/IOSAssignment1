@@ -20,14 +20,17 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
 
         //set data based on detail type
-            movieTitle.text = selectedMovie?.title
-            details.text = selectedMovie?.overview
-            date.text = selectedMovie?.releaseDate
-            //get image from url
-            if let posterPath = selectedMovie?.posterPath {
-                fetchImage(forPath: posterPath)
-            }
-        
+        movieTitle.text = selectedMovie?.title
+        details.text = selectedMovie?.overview
+        //tv shows dont have release dates
+        if let releaseDate = selectedMovie?.releaseDate{
+            date.text = "Release Date \(releaseDate)"
+        }
+        //get image from url
+        if let posterPath = selectedMovie?.posterPath {
+            fetchImage(forPath: posterPath)
+        }
+        //set custom font for title
         if let customFont = UIFont(name: "ProtestGuerrilla-Regular", size: 33){
             movieTitle.font = UIFontMetrics(forTextStyle: .title1).scaledFont(for: customFont)
         }

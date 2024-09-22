@@ -120,7 +120,7 @@ class ViewController: UIViewController {
         movieTask.resume()
     }
     
-    //gets the media type from the response. If it is a movie creates movie object and adds it to the list
+    //Filters through the api response by the media type and adds movies to the table
     func getMoviesFromResponse(){
         for response in mixedResponse {
             switch response.mediaType{
@@ -150,7 +150,6 @@ class ViewController: UIViewController {
                 return
             }
         }
-        print("MOVIES \(movies)")
     }
     
     //send data to the detailView depending on the searchType
