@@ -14,23 +14,24 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var detailImage: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
     
-    var selectedMovie: Movie?
+    var selectedMovie: Movie!
+    var movieStore: MovieStore!
 
     //MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //set data
-        movieTitle.text = selectedMovie?.title
-        details.text = selectedMovie?.overview
+        movieTitle.text = selectedMovie.title
+        details.text = selectedMovie.overview
         //tv shows dont have release dates
-        if let releaseDate = selectedMovie?.releaseDate{
+        if let releaseDate = selectedMovie.releaseDate{
             date.text = "Release Date: \(releaseDate)"
         }
         
         
         //get image from url
-        if let posterPath = selectedMovie?.posterPath {
+        if let posterPath = selectedMovie.posterPath {
             fetchImage(forPath: posterPath)
         }
         //set custom font for title
@@ -60,7 +61,10 @@ class DetailsViewController: UIViewController {
         imageFetch.resume()
     }
     
-
+    @IBAction func addToFavorites(_ sender: UIBarButtonItem) {
+        movieStore.addNewMovie(movie: selectedMovie)
+    }
+    
     /*
     // MARK: - Navigation
 

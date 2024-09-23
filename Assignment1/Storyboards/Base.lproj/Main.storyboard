@@ -197,7 +197,13 @@
                             <constraint firstItem="uVH-S3-ffG" firstAttribute="top" secondItem="v0H-Df-Abw" secondAttribute="top" id="vQu-32-zg7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="1Hu-yp-WYB"/>
+                    <navigationItem key="navigationItem" id="1Hu-yp-WYB">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus.app.fill" catalog="system" id="Hou-Lb-AqR">
+                            <connections>
+                                <action selector="addToFavorites:" destination="JhU-qX-gn7" id="RP1-bA-cfF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="date" destination="J79-1y-Dz1" id="1ma-Ig-DsV"/>
                         <outlet property="detailImage" destination="DHF-Ii-cuW" id="3Dk-BT-uWF"/>
@@ -230,6 +236,7 @@
     </scenes>
     <resources>
         <image name="evan_bench.jpg" width="1440" height="1920"/>
+        <image name="plus.app.fill" catalog="system" width="128" height="114"/>
         <namedColor name="CustomBlue">
             <color red="0.80784313725490198" green="0.92941176470588238" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

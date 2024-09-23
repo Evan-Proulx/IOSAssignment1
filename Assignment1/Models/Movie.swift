@@ -16,6 +16,9 @@ struct Movies: Codable{
 }
 
 struct Movie:Codable,Hashable{
+    static var lastId: Int = 0
+    
+    var id: Int
     var backdropPath: String?
     var title: String
     var overview: String?
@@ -23,6 +26,7 @@ struct Movie:Codable,Hashable{
     var releaseDate: String?
     
     enum CodingKeys: String, CodingKey {
+            case id
             case backdropPath = "backdrop_path"
             case title
             case overview = "overview"
@@ -31,6 +35,8 @@ struct Movie:Codable,Hashable{
         }
     
     init(backdropPath: String?, title: String, overview: String?, posterPath: String?, releaseDate: String?) {
+            self.id = Movie.lastId
+            Movie.lastId += 1
             self.backdropPath = backdropPath
             self.title = title
             self.overview = overview

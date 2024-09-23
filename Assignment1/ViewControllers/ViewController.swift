@@ -12,6 +12,8 @@ class ViewController: UIViewController {
     var movies = [Movie]()
     var mixedResponse = [Response]()
     
+    var movieStore = MovieStore()
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -19,6 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         searchBar.delegate = self
+        movieStore.getMovies()
     }
     
     
@@ -152,13 +155,14 @@ class ViewController: UIViewController {
         }
     }
     
-    //Send mvoie data to the detailView
+    //Send movie data to the detailView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         guard let index = tableView.indexPathForSelectedRow else {return}
-        let destinationVC = segue.destination as! DetailsViewController
+        let destinationVC = segue.destination as? DetailsViewController
         
-            let movieToPass = datasource.itemIdentifier(for: index)
-            destinationVC.selectedMovie = movieToPass
+        let movieToPass = datasource.itemIdentifier(for: index)
+        destinationVC?.selectedMovie = movieToPass
+        destinationVC?.movieStore = movieStore
     }
 }
 
