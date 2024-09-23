@@ -8,11 +8,10 @@
 import UIKit
 
 class ViewController: UIViewController {
+    //MARK: Properties
     var movies = [Movie]()
-    var m = [Response]()
     var mixedResponse = [Response]()
     
-    @IBOutlet weak var searchSwitch: UISwitch!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -23,8 +22,7 @@ class ViewController: UIViewController {
     }
     
     
-    //MARK: Datasources
-    //tableview for movies
+    //MARK: Table
     lazy var datasource = UITableViewDiffableDataSource<Section, Movie>(tableView: tableView){
         tableview, indexpath, movie in
         let cell = tableview.dequeueReusableCell(withIdentifier: "movieCell", for: indexpath) as? MovieTableViewCell
@@ -36,8 +34,8 @@ class ViewController: UIViewController {
         }
         return cell
     }
-    //MARK: Snapshots
-    //snapshot for movies
+    
+    //MARK: Methods
     func createSnapshot(){
         var snapshot = NSDiffableDataSourceSnapshot<Section, Movie>()
         snapshot.appendSections([.main])
@@ -45,7 +43,6 @@ class ViewController: UIViewController {
         datasource.apply(snapshot,animatingDifferences: true)
     }
     
-    //MARK: Methods
     func fetchImage(forPath path:String, inCell cell: MovieTableViewCell){
         let initialPath = "https://image.tmdb.org/t/p/w500/"
         
@@ -61,6 +58,7 @@ class ViewController: UIViewController {
             
             if error == nil, let url = url, let data = try? Data(contentsOf: url), let image = UIImage(data: data){
                 
+                //add image to cell
                 DispatchQueue.main.async {
                     cell.img.image = image
                 }
@@ -100,12 +98,14 @@ class ViewController: UIViewController {
                     let downloadedResults = try jsonDecoder.decode(Responses.self, from: fetchedData)
                     
                     self.movies.removeAll()
+                    //convert search results to Movie objects
                     self.mixedResponse = downloadedResults.results
                     self.getMoviesFromResponse()
                 
-                        DispatchQueue.main.async {
-                            self.createSnapshot()
-                        }
+                    //fill table with movies
+                    DispatchQueue.main.async {
+                        self.createSnapshot()
+                    }
                 } catch DecodingError.valueNotFound(let type, let context){
                     print("Error - value not found \(type): \(context)")
                 } catch DecodingError.typeMismatch(let type, let context){
@@ -131,8 +131,8 @@ class ViewController: UIViewController {
                 }
                 break
             case "tv":
-                if let backdrop = response.backdropPath, let title = response.name{
-                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: "")
+                if let backdrop = response.backdropPath, let title = response.name, let releaseDate = response.firstAirDate{
+                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: releaseDate)
                     print(movie)
                     movies.append(movie)
                 }
@@ -152,7 +152,7 @@ class ViewController: UIViewController {
         }
     }
     
-    //send data to the detailView depending on the searchType
+    //Send mvoie data to the detailView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         guard let index = tableView.indexPathForSelectedRow else {return}
         let destinationVC = segue.destination as! DetailsViewController
@@ -163,10 +163,11 @@ class ViewController: UIViewController {
 }
 
 
+//MARK: Delegates
 
+//gets input from searchbar and sends it to the api search method
 extension ViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("Test")
         guard let text = searchBar.text, !text.isEmpty else { return }
         if let movieURL = createUrl(text: text){
             print("test")

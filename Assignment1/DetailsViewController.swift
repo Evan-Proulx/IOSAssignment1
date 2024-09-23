@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
-
+    //MARK: Properties
     @IBOutlet weak var details: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var detailImage: UIImageView!
@@ -16,16 +16,19 @@ class DetailsViewController: UIViewController {
     
     var selectedMovie: Movie?
 
+    //MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //set data based on detail type
+        //set data
         movieTitle.text = selectedMovie?.title
         details.text = selectedMovie?.overview
         //tv shows dont have release dates
         if let releaseDate = selectedMovie?.releaseDate{
-            date.text = "Release Date \(releaseDate)"
+            date.text = "Release Date: \(releaseDate)"
         }
+        
+        
         //get image from url
         if let posterPath = selectedMovie?.posterPath {
             fetchImage(forPath: posterPath)
