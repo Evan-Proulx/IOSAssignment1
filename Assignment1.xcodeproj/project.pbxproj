@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		208CF9EA2C9B58DE0006ED76 /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208CF9E92C9B58DD0006ED76 /* Actor.swift */; };
 		208E71912CA209A6004B5456 /* MovieStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208E71902CA209A6004B5456 /* MovieStore.swift */; };
+		208E71932CA22A73004B5456 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208E71922CA22A73004B5456 /* FavoriteViewController.swift */; };
 		20A5E4F12C9A698D0058F0C3 /* evan_bench.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20A5E4F02C9A698C0058F0C3 /* evan_bench.jpg */; };
 		20AC136E2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 20AC136D2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf */; };
 		20BBDFD42CA08D2900F81087 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BBDFD32CA08D2900F81087 /* Response.swift */; };
@@ -44,6 +45,7 @@
 /* Begin PBXFileReference section */
 		208CF9E92C9B58DD0006ED76 /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
 		208E71902CA209A6004B5456 /* MovieStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieStore.swift; sourceTree = "<group>"; };
+		208E71922CA22A73004B5456 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		20A5E4F02C9A698C0058F0C3 /* evan_bench.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = evan_bench.jpg; sourceTree = "<group>"; };
 		20AC136D2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProtestGuerrilla-Regular.ttf"; sourceTree = "<group>"; };
 		20BBDFD32CA08D2900F81087 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			children = (
 				420B6DAE2C937F780094A221 /* ViewController.swift */,
 				42F1CD482C98BA4000F04096 /* DetailsViewController.swift */,
+				208E71922CA22A73004B5456 /* FavoriteViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				208E71932CA22A73004B5456 /* FavoriteViewController.swift in Sources */,
 				420B6DAF2C937F780094A221 /* ViewController.swift in Sources */,
 				420B6DAB2C937F780094A221 /* AppDelegate.swift in Sources */,
 				420B6DDF2C9387480094A221 /* MovieTableViewCell.swift in Sources */,
