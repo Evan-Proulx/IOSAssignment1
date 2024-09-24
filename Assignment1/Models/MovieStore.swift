@@ -10,14 +10,14 @@ import Foundation
 import UIKit
 
 class MovieStore{
-    private var movies: [Movie] = []
+    private var movies = Set<Movie>()
     
     var numMovies: Int{
         return movies.count
     }
     
     var getAllMovies: [Movie]{
-        return movies
+        return Array(movies)
     }
     
     var documentDirectory: URL?{
@@ -36,31 +36,18 @@ class MovieStore{
     }
     
     func addNewMovie(movie: Movie){
-        movies.append(movie)
+        movies.insert(movie)
         saveMovies()
         print("MOVIES: \(numMovies)")
     }
     
     //If the selected movie exists in the list, remove it from the array and save
     func removeMovie(movie: Movie){
-        for(index, storedMovie) in movies.enumerated(){
-            if storedMovie.id == movie.id{
-                movies.remove(at: index)
-                saveMovies()
-                return
-            }
-        }
+        movies.remove(movie)
+        saveMovies()
+        return
     }
     
-    func updateMovie(withId id: Int, updatedMovie: Movie) {
-        for (index, movie) in movies.enumerated() {
-            if movie.id == id {
-                movies[index] = updatedMovie
-                saveMovies()
-                return
-            }
-        }
-    }
 
     //Takes json url and updates it with the movie data
     func save(to url: URL){
@@ -80,7 +67,12 @@ class MovieStore{
         do{
             let jsonDecoder = JSONDecoder()
             let jsonData = try Data(contentsOf: url)
-            movies = try jsonDecoder.decode([Movie].self, from: jsonData)
+            let results = try jsonDecoder.decode([Movie].self, from: jsonData)
+            
+            //add saved movies to list
+            for movie in results {
+                movies.insert(movie)
+            }
         } catch {
             print("Error decoding the JSON - \(error.localizedDescription)")
         }

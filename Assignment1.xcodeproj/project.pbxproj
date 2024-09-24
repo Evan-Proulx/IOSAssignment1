@@ -10,6 +10,7 @@
 		208CF9EA2C9B58DE0006ED76 /* Actor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208CF9E92C9B58DD0006ED76 /* Actor.swift */; };
 		208E71912CA209A6004B5456 /* MovieStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208E71902CA209A6004B5456 /* MovieStore.swift */; };
 		208E71932CA22A73004B5456 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208E71922CA22A73004B5456 /* FavoriteViewController.swift */; };
+		208E71952CA3181D004B5456 /* CustomAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208E71942CA3181D004B5456 /* CustomAnimation.swift */; };
 		20A5E4F12C9A698D0058F0C3 /* evan_bench.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 20A5E4F02C9A698C0058F0C3 /* evan_bench.jpg */; };
 		20AC136E2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 20AC136D2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf */; };
 		20BBDFD42CA08D2900F81087 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BBDFD32CA08D2900F81087 /* Response.swift */; };
@@ -46,6 +47,7 @@
 		208CF9E92C9B58DD0006ED76 /* Actor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actor.swift; sourceTree = "<group>"; };
 		208E71902CA209A6004B5456 /* MovieStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieStore.swift; sourceTree = "<group>"; };
 		208E71922CA22A73004B5456 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		208E71942CA3181D004B5456 /* CustomAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimation.swift; sourceTree = "<group>"; };
 		20A5E4F02C9A698C0058F0C3 /* evan_bench.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = evan_bench.jpg; sourceTree = "<group>"; };
 		20AC136D2C9A352A00A9D65E /* ProtestGuerrilla-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ProtestGuerrilla-Regular.ttf"; sourceTree = "<group>"; };
 		20BBDFD32CA08D2900F81087 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				208CF9E92C9B58DD0006ED76 /* Actor.swift */,
 				420B6DDC2C93844D0094A221 /* Movie.swift */,
 				208E71902CA209A6004B5456 /* MovieStore.swift */,
+				208E71942CA3181D004B5456 /* CustomAnimation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				420B6DAD2C937F780094A221 /* SceneDelegate.swift in Sources */,
 				420B6DDD2C93844D0094A221 /* Movie.swift in Sources */,
 				208CF9EA2C9B58DE0006ED76 /* Actor.swift in Sources */,
+				208E71952CA3181D004B5456 /* CustomAnimation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

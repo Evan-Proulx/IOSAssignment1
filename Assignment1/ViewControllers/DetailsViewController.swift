@@ -16,7 +16,8 @@ class DetailsViewController: UIViewController {
     
     var selectedMovie: Movie!
     var movieStore: MovieStore!
-
+    
+    
     //MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +63,27 @@ class DetailsViewController: UIViewController {
     }
     
     @IBAction func addToFavorites(_ sender: UIBarButtonItem) {
-        movieStore.addNewMovie(movie: selectedMovie)
+        //display animation and add movie to list
+        let addedAnimation = CustomAnimation()
+        addedAnimation.frame = view.bounds
+        addedAnimation.isOpaque = false
+        
+        view.addSubview(addedAnimation)
+        view.isUserInteractionEnabled = false
+        
+        if movieStore.alreadyInList(movie: selectedMovie){
+            addedAnimation.dialogTitle = NSString("Already Added")
+            addedAnimation.dialogFillColour = UIColor.yellow
+        }else{
+            movieStore.addNewMovie(movie: selectedMovie)
+            addedAnimation.dialogTitle = NSString("Movie Added")
+            addedAnimation.dialogFillColour = UIColor.green
+        }
+        addedAnimation.showDialog()
+        let delay = 1.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            self.navigationController?.popViewController(animated: true)
+        })
     }
     
     /*
