@@ -45,7 +45,6 @@ class MovieStore{
     func removeMovie(movie: Movie){
         movies.remove(movie)
         saveMovies()
-        return
     }
     
 

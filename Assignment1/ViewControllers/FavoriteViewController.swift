@@ -18,9 +18,8 @@ class FavoriteViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         movieStore.getMovies()
-        movies = movieStore.getAllMovies
-        print("MOVIES: \(movies)")
-        
+
+        tableView.delegate = self
         createSnapshot()
     }
     
@@ -42,7 +41,7 @@ class FavoriteViewController: UIViewController {
     func createSnapshot(){
         var snapshot = NSDiffableDataSourceSnapshot<Section, Movie>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(movies)
+        snapshot.appendItems(movieStore.getAllMovies)
         datasource.apply(snapshot,animatingDifferences: true)
     }
     
@@ -71,6 +70,11 @@ class FavoriteViewController: UIViewController {
         imageFetch.resume()
     }
     
+    func deleteAlert(){
+        
+    }
+    
+    
     //Send movie data to the detailView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         guard let index = tableView.indexPathForSelectedRow else {return}
@@ -81,4 +85,39 @@ class FavoriteViewController: UIViewController {
         destinationVC?.movieStore = movieStore
     }
 
+}
+
+//allow for swiping on row to delete record
+extension FavoriteViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Remove"){
+            _, _, completionHandler in
+            guard let itemToRemove = self.datasource.itemIdentifier(for: indexPath) else{return}
+            
+            //alert before deleting
+            let alert = UIAlertController(title: "DELETE", message: "Are you sure you want to delte?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive){
+                _ in
+                //delete movie
+                self.movieStore.removeMovie(movie: itemToRemove)
+                self.createSnapshot()
+                
+                completionHandler(true)
+            })
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel){
+                _ in
+            })
+            //show alert
+            self.present(alert, animated: true)
+        }
+        
+        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.backgroundColor = UIColor.red
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
