@@ -65,11 +65,18 @@ class DetailsViewController: UIViewController {
         view.addSubview(addedAnimation)
         view.isUserInteractionEnabled = false
         
-        //TODO: check if movie already in list
+        //check if movie already in list
+        guard let movies = movieList.movies as? Set<Movie> else{return}
         
-        movieList.addToMovies(selectedMovie)
-        addedAnimation.dialogTitle = NSString("Movie Added")
-        addedAnimation.dialogFillColour = UIColor.green
+        print(movies)
+        if movies.contains(selectedMovie){
+            addedAnimation.dialogTitle = NSString("Already Added")
+            addedAnimation.dialogFillColour = UIColor.yellow
+        }else{
+            movieList.addToMovies(selectedMovie)
+            addedAnimation.dialogTitle = NSString("Movie Added")
+            addedAnimation.dialogFillColour = UIColor.green
+        }
         
         coreDataStack.saveContext()
         
@@ -79,15 +86,5 @@ class DetailsViewController: UIViewController {
             self.navigationController?.popViewController(animated: true)
         })
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

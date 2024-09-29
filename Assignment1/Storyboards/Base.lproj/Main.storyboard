@@ -105,7 +105,7 @@
                                         <connections>
                                             <outlet property="img" destination="bD1-O9-TIw" id="8vh-V2-oC5"/>
                                             <outlet property="title" destination="HZR-gI-yug" id="4LU-6J-5P9"/>
-                                            <segue destination="JhU-qX-gn7" kind="show" id="TDT-wg-DFI"/>
+                                            <segue destination="JhU-qX-gn7" kind="show" identifier="toDetails" id="TDT-wg-DFI"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -133,7 +133,7 @@
                     <navigationItem key="navigationItem" id="yxr-1k-dsV">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="movieclapper.fill" catalog="system" id="cj7-mv-QMo">
                             <connections>
-                                <segue destination="BYZ-38-t0r" kind="show" id="BGb-uJ-84L"/>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="toSearch" id="BGb-uJ-84L"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

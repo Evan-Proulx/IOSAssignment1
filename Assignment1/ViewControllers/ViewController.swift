@@ -151,12 +151,14 @@ class ViewController: UIViewController {
                     newMovie.movieDetails = overview
                     newMovie.moviePoster = posterPath
                     movies.append(newMovie)
+                }else{
+                    return
                 }
                 break
             case "person":
                 if let knownFor = response.knownFor{
-                    for _ in knownFor{
-                        if let title = response.title, let releaseDate = response.releaseDate, let overview = response.overview, let posterPath = response.posterPath{
+                    for movie in knownFor{
+                        if let title = movie.title, let releaseDate = movie.releaseDate, let overview = movie.overview, let posterPath = movie.posterPath{
                             let newMovie = Movie(context: self.coreDataStack.managedContext)
                             newMovie.movieTitle = title
                             newMovie.movieRelease = releaseDate

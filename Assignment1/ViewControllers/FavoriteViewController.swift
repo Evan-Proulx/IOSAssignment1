@@ -76,28 +76,28 @@ class FavoriteViewController: UIViewController {
         imageFetch.resume()
     }
     
-    func deleteAlert(){
-        
-    }
+   
     
     
-//    //Send movie data to the detailView
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
-//        guard let index = tableView.indexPathForSelectedRow else {return}
-//        let destinationVC = segue.destination as? DetailsViewController
-//        
-//        let movieToPass = datasource.itemIdentifier(for: index)
-//        destinationVC?.selectedMovie = movieToPass
-//    }
-    
-    //Navigate to the movie search
+    //Send data based on segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
-        let destinationVC = segue.destination as? ViewController
-        
-        destinationVC?.movieList = movieList
-        destinationVC?.coreDataStack = coreDataStack    }
+        if segue.identifier == "toDetails"{
+            guard let index = tableView.indexPathForSelectedRow else {return}
+            let destinationVC = segue.destination as? DetailsViewController
+            
+            let movieToPass = datasource.itemIdentifier(for: index)
+            destinationVC?.selectedMovie = movieToPass
+            destinationVC?.movieList = movieList
+        }
+        else if segue.identifier == "toSearch"{
+            let destinationVC = segue.destination as? ViewController
+            
+            destinationVC?.movieList = movieList
+            destinationVC?.coreDataStack = coreDataStack
+        }
+        }
+    }
 
-}
 
 //allow for swiping on row to delete record
 extension FavoriteViewController: UITableViewDelegate{
@@ -108,15 +108,16 @@ extension FavoriteViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Remove"){
             _, _, completionHandler in
-            guard let itemToRemove = self.datasource.itemIdentifier(for: indexPath) else{return}
+            guard let movieToRemove = self.datasource.itemIdentifier(for: indexPath) else{return}
             
             //alert before deleting
             let alert = UIAlertController(title: "DELETE", message: "Are you sure you want to delte?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Delete", style: .destructive){
                 _ in
                 //delete movie
-//                self.movieStore.removeMovie(movie: itemToRemove)
-//                self.createSnapshot()
+                self.movieList.removeFromMovies(movieToRemove)
+                self.createSnapshot()
+                self.coreDataStack.saveContext()
                 
                 completionHandler(true)
             })
