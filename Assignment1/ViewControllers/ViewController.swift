@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     
     var movies = [Movie]()
     
-    lazy var coreDataStack = CoreDataStack(modelName: "MovieModel")
+    var movieList: MovieList!
+    var coreDataStack = CoreDataStack(modelName: "MovieModel")
 
     
     @IBOutlet weak var tableView: UITableView!
@@ -178,6 +179,7 @@ class ViewController: UIViewController {
         
         let movieToPass = datasource.itemIdentifier(for: index)
         destinationVC?.selectedMovie = movieToPass
+        destinationVC?.movieList = movieList
     }
 }
 

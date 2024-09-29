@@ -18,8 +18,8 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        //populate table with users
+        fetchUsers()
     }
     
     lazy var listDataSource = UITableViewDiffableDataSource<Section, MovieList>(tableView: tableView) { tableView, indexPath, user in
@@ -74,6 +74,16 @@ class UserViewController: UIViewController {
         snapshot.appendItems(users)
         snapshot.reloadItems(users)
         listDataSource.apply(snapshot)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as? FavoriteViewController
+        
+        guard let indexPath = tableView.indexPathForSelectedRow else { return }
+        let movieList = listDataSource.itemIdentifier(for: indexPath)
+        destination?.movieList = movieList
+        destination?.coreDataStack = coreDataStack
+        
     }
 
 }

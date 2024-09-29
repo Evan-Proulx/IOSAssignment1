@@ -17,8 +17,8 @@ class DetailsViewController: UIViewController {
     var selectedMovie: Movie!
     var movieList: MovieList!
     
-    var coreDataStack: CoreDataStack!
-    
+    var coreDataStack = CoreDataStack(modelName: "MovieModel")
+
     //MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
