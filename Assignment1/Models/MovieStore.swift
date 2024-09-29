@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 
 class MovieStore{
-    private var movies = Set<Movie>()
+    private var movies = Set<MovieData>()
     
     var numMovies: Int{
         return movies.count
     }
     
-    var getAllMovies: [Movie]{
+    var getAllMovies: [MovieData]{
         return Array(movies)
     }
     
@@ -27,7 +27,7 @@ class MovieStore{
     }
     
     //Check if movie already exists in the array
-    func alreadyInList(movie: Movie) -> Bool{
+    func alreadyInList(movie: MovieData) -> Bool{
         if movies.contains(movie){
             return true
         }else{
@@ -35,14 +35,14 @@ class MovieStore{
         }
     }
     
-    func addNewMovie(movie: Movie){
+    func addNewMovie(movie: MovieData){
         movies.insert(movie)
         saveMovies()
         print("MOVIES: \(numMovies)")
     }
     
     //If the selected movie exists in the list, remove it from the array and save
-    func removeMovie(movie: Movie){
+    func removeMovie(movie: MovieData){
         movies.remove(movie)
         saveMovies()
     }
@@ -66,7 +66,7 @@ class MovieStore{
         do{
             let jsonDecoder = JSONDecoder()
             let jsonData = try Data(contentsOf: url)
-            let results = try jsonDecoder.decode([Movie].self, from: jsonData)
+            let results = try jsonDecoder.decode([MovieData].self, from: jsonData)
             
             //add saved movies to list
             for movie in results {

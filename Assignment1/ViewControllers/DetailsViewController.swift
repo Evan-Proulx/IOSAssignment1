@@ -15,26 +15,20 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var movieTitle: UILabel!
     
     var selectedMovie: Movie!
-    var movieStore: MovieStore!
+    var movieList: MovieList!
     
+    var coreDataStack: CoreDataStack!
     
     //MARK: Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //set data
-        movieTitle.text = selectedMovie.title
-        details.text = selectedMovie.overview
-        //tv shows dont have release dates
-        if let releaseDate = selectedMovie.releaseDate{
-            date.text = "Release Date: \(releaseDate)"
-        }
-        
-        
+        movieTitle.text = selectedMovie.movieTitle
+        details.text = selectedMovie.movieDetails
+        date.text = "Release Date: \(selectedMovie.movieRelease)"
         //get image from url
-        if let posterPath = selectedMovie.posterPath {
-            fetchImage(forPath: posterPath)
-        }
+        fetchImage(forPath: selectedMovie.moviePoster)
         //set custom font for title
         if let customFont = UIFont(name: "ProtestGuerrilla-Regular", size: 33){
             movieTitle.font = UIFontMetrics(forTextStyle: .title1).scaledFont(for: customFont)
@@ -71,14 +65,14 @@ class DetailsViewController: UIViewController {
         view.addSubview(addedAnimation)
         view.isUserInteractionEnabled = false
         
-        if movieStore.alreadyInList(movie: selectedMovie){
-            addedAnimation.dialogTitle = NSString("Already Added")
-            addedAnimation.dialogFillColour = UIColor.yellow
-        }else{
-            movieStore.addNewMovie(movie: selectedMovie)
-            addedAnimation.dialogTitle = NSString("Movie Added")
-            addedAnimation.dialogFillColour = UIColor.green
-        }
+        //TODO: check if movie already in list
+        
+        movieList.addToMovies(selectedMovie)
+        addedAnimation.dialogTitle = NSString("Movie Added")
+        addedAnimation.dialogFillColour = UIColor.green
+        
+        coreDataStack.saveContext()
+        
         addedAnimation.showDialog()
         let delay = 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {

@@ -9,10 +9,15 @@ import UIKit
 
 class ViewController: UIViewController {
     //MARK: Properties
-    var movies = [Movie]()
+//    var movies = [MovieData]()
     var mixedResponse = [Response]()
     
     var movieStore = MovieStore()
+    
+    var movies = [Movie]()
+    
+    lazy var coreDataStack = CoreDataStack(modelName: "MovieModel")
+
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -30,11 +35,10 @@ class ViewController: UIViewController {
         tableview, indexpath, movie in
         let cell = tableview.dequeueReusableCell(withIdentifier: "movieCell", for: indexpath) as? MovieTableViewCell
 
-        cell?.title.text = movie.title
-        
-        if let moviePosterPath = movie.posterPath{
-            self.fetchImage(forPath: moviePosterPath, inCell: cell!)
-        }
+        cell?.title.text = movie.movieTitle
+        //get poster
+        self.fetchImage(forPath: movie.moviePoster, inCell: cell!)
+    
         return cell
     }
     
@@ -128,24 +132,36 @@ class ViewController: UIViewController {
         for response in mixedResponse {
             switch response.mediaType{
             case "movie":
-                if let backdrop = response.backdropPath, let title = response.title, let releaseDate = response.releaseDate{
-                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: releaseDate)
-                    movies.append(movie)
+                if let title = response.title, let releaseDate = response.releaseDate, let overview = response.overview, let posterPath = response.posterPath{
+                    let newMovie = Movie(context: self.coreDataStack.managedContext)
+                    newMovie.movieTitle = title
+                    newMovie.movieRelease = releaseDate
+                    newMovie.movieDetails = overview
+                    newMovie.moviePoster = posterPath
+                    self.coreDataStack.saveContext()
+                    self.movies.append(newMovie)
                 }
                 break
             case "tv":
-                if let backdrop = response.backdropPath, let title = response.name, let releaseDate = response.firstAirDate{
-                    let movie = Movie(backdropPath: backdrop, title: title, overview: response.overview, posterPath: response.posterPath, releaseDate: releaseDate)
-                    print(movie)
-                    movies.append(movie)
+                if let title = response.name, let releaseDate = response.firstAirDate, let overview = response.overview, let posterPath = response.posterPath{
+                    let newMovie = Movie(context: self.coreDataStack.managedContext)
+                    newMovie.movieTitle = title
+                    newMovie.movieRelease = releaseDate
+                    newMovie.movieDetails = overview
+                    newMovie.moviePoster = posterPath
+                    movies.append(newMovie)
                 }
                 break
             case "person":
                 if let knownFor = response.knownFor{
-                    for film in knownFor{
-                        if let backdrop = film.backdropPath, let title = film.title, let releaseDate = film.releaseDate{
-                            let movie = Movie(backdropPath: backdrop, title: title, overview: film.overview, posterPath: film.posterPath, releaseDate: releaseDate)
-                            movies.append(movie)
+                    for _ in knownFor{
+                        if let title = response.title, let releaseDate = response.releaseDate, let overview = response.overview, let posterPath = response.posterPath{
+                            let newMovie = Movie(context: self.coreDataStack.managedContext)
+                            newMovie.movieTitle = title
+                            newMovie.movieRelease = releaseDate
+                            newMovie.movieDetails = overview
+                            newMovie.moviePoster = posterPath
+                            movies.append(newMovie)
                         }
                     }
                 }
@@ -162,7 +178,6 @@ class ViewController: UIViewController {
         
         let movieToPass = datasource.itemIdentifier(for: index)
         destinationVC?.selectedMovie = movieToPass
-        destinationVC?.movieStore = movieStore
     }
 }
 

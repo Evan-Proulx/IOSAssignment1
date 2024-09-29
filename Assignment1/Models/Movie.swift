@@ -12,10 +12,10 @@ enum Section{
 }
 
 struct Movies: Codable{
-    var results: [Movie]
+    var results: [MovieData]
 }
 
-struct Movie:Codable,Hashable{
+struct MovieData:Codable,Hashable{
     static var lastId: Int = 0
     
     var id: Int
@@ -35,8 +35,8 @@ struct Movie:Codable,Hashable{
         }
     
     init(backdropPath: String?, title: String, overview: String?, posterPath: String?, releaseDate: String?) {
-            self.id = Movie.lastId
-            Movie.lastId += 1
+            self.id = MovieData.lastId
+            MovieData.lastId += 1
             self.backdropPath = backdropPath
             self.title = title
             self.overview = overview

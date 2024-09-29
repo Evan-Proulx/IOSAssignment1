@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23G93" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Movie" representedClassName="Movie" syncable="YES">
+        <attribute name="attribute" optional="YES"/>
+        <attribute name="attribute1" optional="YES"/>
+        <attribute name="attribute2" optional="YES"/>
+        <attribute name="movieDetails" optional="YES" attributeType="String"/>
+        <attribute name="moviePoster" optional="YES" attributeType="String"/>
+        <attribute name="movieRelease" optional="YES" attributeType="String"/>
+        <attribute name="movieTitle" optional="YES" attributeType="String"/>
+        <relationship name="watchList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MovieList" inverseName="movies" inverseEntity="MovieList"/>
+    </entity>
+    <entity name="MovieList" representedClassName="MovieList" syncable="YES">
+        <attribute name="listName" attributeType="String"/>
+        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="watchList" inverseEntity="Movie"/>
+    </entity>
+</model>

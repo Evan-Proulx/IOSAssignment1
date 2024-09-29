@@ -29,11 +29,10 @@ class FavoriteViewController: UIViewController {
         tableview, indexpath, movie in
         let cell = tableview.dequeueReusableCell(withIdentifier: "movieCell", for: indexpath) as? MovieTableViewCell
 
-        cell?.title.text = movie.title
+        cell?.title.text = movie.movieTitle
         
-        if let moviePosterPath = movie.posterPath{
-            self.fetchImage(forPath: moviePosterPath, inCell: cell!)
-        }
+        self.fetchImage(forPath: movie.moviePoster, inCell: cell!)
+        
         return cell
     }
     
@@ -41,7 +40,7 @@ class FavoriteViewController: UIViewController {
     func createSnapshot(){
         var snapshot = NSDiffableDataSourceSnapshot<Section, Movie>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(movieStore.getAllMovies)
+        snapshot.appendItems(movies)
         datasource.apply(snapshot,animatingDifferences: true)
     }
     
@@ -82,7 +81,6 @@ class FavoriteViewController: UIViewController {
         
         let movieToPass = datasource.itemIdentifier(for: index)
         destinationVC?.selectedMovie = movieToPass
-        destinationVC?.movieStore = movieStore
     }
 
 }
@@ -103,8 +101,8 @@ extension FavoriteViewController: UITableViewDelegate{
             alert.addAction(UIAlertAction(title: "Delete", style: .destructive){
                 _ in
                 //delete movie
-                self.movieStore.removeMovie(movie: itemToRemove)
-                self.createSnapshot()
+//                self.movieStore.removeMovie(movie: itemToRemove)
+//                self.createSnapshot()
                 
                 completionHandler(true)
             })
