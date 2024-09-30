@@ -151,8 +151,6 @@ class ViewController: UIViewController {
                     newMovie.movieDetails = overview
                     newMovie.moviePoster = posterPath
                     movies.append(newMovie)
-                }else{
-                    return
                 }
                 break
             case "person":
